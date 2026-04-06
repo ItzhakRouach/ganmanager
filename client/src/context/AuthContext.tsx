@@ -1,19 +1,5 @@
 import { createContext, useState, ReactNode } from "react";
-
-// defined the shape of auth state
-interface User {
-  id: number;
-  email: string;
-  name: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  login: (token: string, user: User) => void;
-  logout: () => void;
-  isAuthenticated: boolean;
-}
+import type { User, AuthContextType } from "../types";
 
 // create context
 // eslint-disable-next-line react-refresh/only-export-components
