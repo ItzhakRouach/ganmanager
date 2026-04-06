@@ -20,70 +20,92 @@ const Login = () => {
     try {
       const response = await api.post("auth/login", { email, password });
       const { token, user } = response.data;
-
       login(token, user);
       navigate("/dashboard");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "שגיאה בהתחברות");
+    } catch (err: unknown) {
+      const axiosError = err as { response?: { data?: { message?: string } } };
+      setError(axiosError.response?.data?.message || "שגיאה בהתחברות");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        {/* Header */}
+    <div className="min-h-screen bg-primary flex items-center justify-center p-4">
+      <div className="w-full max-w-sm">
+        {/* Brand Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-blue-800">מנהל גן</h1>
-          <p className="text-gray-500 mt-2">ברוך הבא 👋</p>
+          <img
+            src="/brand_logo.jpg"
+            alt="הארוחים של אילנית"
+            className="w-28 h-28 rounded-2xl object-cover mx-auto mb-4 shadow-xl"
+          />
+          <h1 className="text-white font-bold text-2xl leading-tight">
+            הארוחים של אילנית
+          </h1>
+          <p className="text-primary-100 text-sm mt-1">לגדול בכיף</p>
         </div>
 
-        {/* Error message */}
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
-            {error}
-          </div>
-        )}
+        {/* Login Card */}
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
+          <h2 className="text-primary font-bold text-xl mb-6 text-right">
+            התחברות למערכת
+          </h2>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              אימייל
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-right focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="הכנסֿ/י אימייל"
-              required
-            />
-          </div>
+          {/* Error banner */}
+          {error && (
+            <div className="bg-red-50 border border-red-100 text-red-600 rounded-xl p-3 text-sm mb-5 text-right">
+              {error}
+            </div>
+          )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              סיסמה
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 text-right focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="הכנס/י סיסמה"
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5 text-right">
+                אימייל
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-right focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-150 text-gray-800 placeholder:text-gray-400"
+                placeholder="הכניסי כתובת אימייל"
+                required
+                dir="ltr"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
-          >
-            {loading ? "מתחבר/ת..." : "התחברות"}
-          </button>
-        </form>
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5 text-right">
+                סיסמה
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-right focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-150 text-gray-800 placeholder:text-gray-400"
+                placeholder="הכניסי סיסמה"
+                required
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-primary hover:bg-primary-light text-white font-semibold py-3 rounded-xl transition-all duration-150 mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "מתחברת..." : "התחברות"}
+            </button>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-primary-100/60 text-xs mt-6">
+          הארוחים של אילנית © {new Date().getFullYear()}
+        </p>
       </div>
     </div>
   );
